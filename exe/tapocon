@@ -1,0 +1,90 @@
+#!/usr/bin/env ruby
+
+# rbenv support:
+# If this file is a symlink, and bound to a specific ruby
+# version via rbenv (indicated by RBENV_VERSION),
+# I want to resolve the symlink and re-exec
+# the original executable respecting the .ruby-version
+# which should indicate the right version.
+#
+if File.symlink?(__FILE__) and ENV["RBENV_VERSION"]
+  ENV["RBENV_VERSION"] = nil
+  shims_path = File.expand_path("shims", ENV["RBENV_ROOT"])
+  ENV["PATH"] = shims_path + ":" + ENV["PATH"]
+  exec(File.readlink(__FILE__), *ARGV)
+end
+
+# If this file is located with Gemfile.lock,
+# require bundler/setup
+#
+gemfile = File.expand_path("../../Gemfile", __FILE__)
+
+if File.exist?(gemfile + ".lock")
+  ENV["BUNDLE_GEMFILE"] = gemfile
+  require "bundler/setup"
+end
+
+require 'tapocon'
+
+def usage
+  puts 'Usage: tapocon scan'
+  puts 'Usage: tapocon -t TARGET -u USERNAME -p PASSWORD OPERATION'
+  puts '  HOSTNAME: IP address of the Tapo device'
+  puts '  USERNAME: email of TP-Link ID'
+  puts '  PASSWORD: password of TP-Link ID'
+  puts '  OPERATION: on, off, toggle, info'
+end
+
+# Usage: tapocon -t TARGET -u USERNAME -p PASSWORD OPERATION
+#   HOSTNAME: 192.168.0.1
+#   USERNAME: from TP-Link ID (alice@example.com)
+#   PASSWORD: from TP-Link ID (password)
+#   OPERATION: on, off, toggle, info, scan
+#
+while ARGV[0] =~ /^-(.)/
+  opt, val = $1, ARGV[1]
+
+  case opt
+  when 't'; target   = val
+  when 'u'; username = val
+  when 'p'; password = val
+  else
+    puts "Unknown option: #{ARGV[0]}"
+    usage
+    exit 1
+  end
+  ARGV.shift(2)
+end
+
+if ARGV.size != 1
+  usage
+  exit 1
+end
+
+operation = ARGV.shift
+
+if operation =~ /^on|off|toggle|info$/
+  if target.nil? || username.nil? || password.nil?
+    puts 'Missing target, username or password'
+    usage
+    exit 1
+  else
+    tapo = Tapocon::Switch.new(target, username, password)
+    tapo.handshake
+    case operation
+    when 'on';     tapo.turn_on
+    when 'off';    tapo.turn_off
+    when 'toggle'; tapo.toggle
+    when 'info';   puts tapo.info.to_h
+    end
+  end
+
+elsif operation == 'scan'
+  tapo = Tapocon::Scanner.new
+  tapo.scan
+
+else
+  puts "Unknown operation: #{operation}"
+  usage
+  exit 1
+end
