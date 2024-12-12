@@ -1,0 +1,73 @@
+#+TITLE: tapocon -- CLI for TAPO P105 and variants
+#+AUTHOR: Yoshinari Nomura
+#+EMAIL:
+#+DATE: 2024-12-12
+#+OPTIONS: H:3 num:2 toc:nil
+#+OPTIONS: ^:nil @:t \n:nil ::t |:t f:t TeX:t
+#+OPTIONS: skip:nil
+#+OPTIONS: author:t
+#+OPTIONS: email:nil
+#+OPTIONS: creator:nil
+#+OPTIONS: timestamp:nil
+#+OPTIONS: timestamps:nil
+#+OPTIONS: d:nil
+#+OPTIONS: tags:t
+#+TEXT:
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE: ja
+#+LATEX_CLASS: jsarticle
+#+LATEX_CLASS_OPTIONS: [a4j]
+# #+LATEX_HEADER: \usepackage{plain-article}
+# #+LATEX_HEADER: \renewcommand\maketitle{}
+# #+LATEX_HEADER: \pagestyle{empty}
+# #+LaTeX: \thispagestyle{empty}
+
+[[file:https://badge.fury.io/rb/tapocon.svg]]
+
+* DESCRIPTION
+  tapocon is a CLI for TAPO P105 and variants.
+
+  You can get the latest version from:
+  + https://github.com/yoshinari-nomura/tapocon
+
+* INSTALL AND SETUP
+** Ruby CLI
+   tapocon CLI command can be installed from rubygems.org.
+   #+BEGIN_SRC shell-script
+     $ gem install tapocon
+   #+END_SRC
+
+   Or, if you want to install tapocon in a sandbox (recommended),
+   Bunlder would help you:
+   #+BEGIN_SRC shell-script
+     $ gem install bundler
+     $ mkdir -p /path/to/install/tapocon
+     $ cd /path/to/install/tapocon
+     $ bundle init
+     $ echo 'gem "tapocon"' >> Gemfile
+     $ bundle config set path vendor/bundle
+     $ bundle install
+     $ export PATH=/path/to/install/tapocon/exe:$PATH
+     $ tapocon -h
+   #+END_SRC
+
+* USAGE
+** Ruby CLI (tapocon)
+   #+begin_example
+     Usage: tapocon scan
+     Usage: tapocon -t TARGET -u USERNAME -p PASSWORD OPERATION
+       HOSTNAME: IP address of the Tapo device
+       USERNAME: email of TP-Link ID
+       PASSWORD: password of TP-Link ID
+       OPERATION: on, off, toggle, info
+   #+end_example
+
+* Development
+  TBD
+
+* Contributing
+  Bug reports and pull requests are welcome on GitHub at https://github.com/yoshinari-nomura/tapocon.
+
+* License
+  The gem is available as open source under the terms of the [[https://opensource.org/licenses/MIT][MIT License]]

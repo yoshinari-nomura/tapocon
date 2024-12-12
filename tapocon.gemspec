@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["Yoshinari Nomura"]
   spec.email = ["nom@quickhack.net"]
 
-  spec.summary = "CLI and MQTT bridge for TAPO P105 and variants"
-  spec.description = "CLI and MQTT bridge for TAPO P105 and variants."
+  spec.summary = "CLI for TAPO P105 and variants"
+  spec.description = "CLI for TAPO P105 and variants."
   spec.homepage = "https://github.com/yoshinari-nomura/tapocon"
   spec.license = "MIT"
 
